@@ -3,9 +3,11 @@ package com.example.downsaveinfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     // 1 - variável EditText no Java para captura do conteúdo inserido pelo usuário (associada ao componente EditText "editTextXML" no Layout)
     private EditText mensagemInserida;
 
+    // 8 - variável button no JAVA associada ao componente Button "downloadXML" no Layout
+    private Button downloadButton;
+
     // 2 - String contendo a mensagem a ser enviada.
     private String mensagem;
 
@@ -28,6 +33,21 @@ public class MainActivity extends AppCompatActivity {
 
         // 3 - Associando a variável mensagemInserida do Java com o componente EditText do arquivoXML
         mensagemInserida = findViewById(R.id.editTextXML);
+
+        // 9 - Associando a variável mensagemInserida do Java com o componente EditText do arquivoXML
+        downloadButton = findViewById(R.id.downloadXML);
+
+        // 10 - Criando o método onClick associado ao botão para vizualização do Download
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mensagemInserida.setText(mensagem);
+            }
+        });
+
+        // 7 - Criando uma instância para AsyncTask e executando uma tarefa executando o método execute().
+        MinhaAsync minhaAsync = new MinhaAsync();
+        minhaAsync.execute("https://www.w3schools.com/xml/note.xml");
 
     }
 
@@ -48,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 5 - Método para download do conteudo XML do site, utilizando a classe httURLCnnection
-    private String (String theUrl){
+    private String downloadXMLFile(String theUrl){
         try{
             //cria uma instancia da classe URL com a url que será utilizada na conexão.
             URL myUrl = new URL(theUrl);
@@ -86,13 +106,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 tempBuffer.append(String.copyValueOf(InputBuffer,0, charRead));
             }
-            return tempBuffer.toString;
+            return tempBuffer.toString();
         }
         // com os métodos open.Connection(), getResponsecode() e getInputStream() podem lançar exceções de 10
         // pois interagem com recursos externos do aplicativo, precisamos de um bloco catch para pegar eventuais exceções.
-        catch (IOException e);
+        catch (IOException e)
         {
-            Log.d("Download", "Io Expection durante a conexão" + e.getmessage());
+            Log.d("Download", "Io Expection durante a conexão" + e.getMessage());
         }
         //nesse caso o método retorna null.
         return null;
@@ -100,6 +120,25 @@ public class MainActivity extends AppCompatActivity {
 
     //Precisamos dar permissão de acesso a internet ao arquivo manifest
     // <uses-permission android:name="android.pemission.INTERNET"></uses.permission>
+
+    //vamos criar o código para a AsyncTask.
+    //que através de uma thread paralela fará a chamada de um método DownloadXMLFile para baixarmos o conteúdo do Feed
+
+    private class MinhaAsync extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            //vamos evocar o método downlodXMLFile passando a url como parametro
+            mensagem = downloadXMLFile(params[0]);
+
+            //Aviso para ser exibido no Logcat caso tenha havido algum problema no download
+            if (mensagem == null){
+                Log.d("Download", "Erro downloading");
+            }
+            return mensagem;
+        }
+    }
 
 
 
