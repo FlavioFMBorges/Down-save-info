@@ -13,16 +13,24 @@
         android:id="@+id/editTextXML"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:ems="10"
+
         android:hint="escreva aqui sua mensagem"
         android:textColor="@color/fuchsia"
         android:inputType="text" />
+
+
+    <Button
+        android:id="@+id/downloadXML"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="DOWNLOAD" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dispara Segunda Tela"
-        android:onClick="disparoNovaTela"/>
+        android:onClick="disparoNovaTela"
+        android:text="DISPARO SEGUNDA TELA" />
+
 </LinearLayout>
